@@ -1,6 +1,5 @@
 package id.fannan.netflixclonedwithcompose.ui.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,11 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import id.fannan.netflixclonedwithcompose.R
 import id.fannan.netflixclonedwithcompose.data.MovieDatasource
 import id.fannan.netflixclonedwithcompose.domain.model.Movie
@@ -30,11 +31,17 @@ fun MovieItem(
     movie: Movie,
     modifier: Modifier = Modifier
 ) {
-    Card(modifier = modifier, shape = RoundedCornerShape(16.dp), elevation = CardDefaults.cardElevation(4.dp)) {
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(4.dp)
+    ) {
         Box(modifier = Modifier.fillMaxWidth()) {
-            Image(
-                painter = painterResource(id = if (isGrid) movie.posterResourceId else movie.backdropResourceId),
-                contentDescription = stringResource(
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(if (isGrid) movie.posterResourceId else movie.backdropResourceId)
+                    .crossfade(true)
+                    .build(), contentDescription = stringResource(
                     R.string.movie_image
                 ),
                 contentScale = ContentScale.Crop,
@@ -59,6 +66,7 @@ fun MovieItem(
             text = movie.title,
             style = MaterialTheme.typography.titleSmall,
             overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)

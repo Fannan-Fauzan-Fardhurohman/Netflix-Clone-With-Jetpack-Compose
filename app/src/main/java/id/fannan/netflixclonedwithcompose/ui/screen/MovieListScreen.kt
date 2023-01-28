@@ -1,6 +1,7 @@
 package id.fannan.netflixclonedwithcompose.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,38 +23,18 @@ import id.fannan.netflixclonedwithcompose.ui.theme.NetflixClonedWithComposeTheme
 
 @ExperimentalMaterial3Api
 @Composable
-fun MovieListScreen() {
+fun MovieListScreen(paddingValues:PaddingValues, movies : List<Movie>) {
 
-    val movies: List<Movie> by rememberSaveable {
-        mutableStateOf(MovieDatasource.getNowPlayingMovie())
-    }
-
-    Scaffold(modifier = Modifier.fillMaxSize(),
-        topBar = {
-            MovieAppBar()
-        }) { contentPadding ->
-        LazyColumn(
-            modifier = Modifier.padding(contentPadding),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(movies) { movie ->
-                MovieItem(
-                    isGrid = false,
-                    movie = movie,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-            }
+    LazyColumn(
+        modifier = Modifier.padding(paddingValues),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(movies) { movie ->
+            MovieItem(
+                isGrid = false,
+                movie = movie,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
         }
-
-    }
-}
-
-
-@ExperimentalMaterial3Api
-@Preview
-@Composable
-fun PreviewMovieListScreen() {
-    NetflixClonedWithComposeTheme {
-        MovieListScreen()
     }
 }
