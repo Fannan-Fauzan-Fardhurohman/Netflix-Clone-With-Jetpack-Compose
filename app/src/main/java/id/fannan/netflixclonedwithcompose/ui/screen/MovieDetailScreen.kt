@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -28,13 +29,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import id.fannan.netflixclonedwithcompose.data.MovieDatasource
 import id.fannan.netflixclonedwithcompose.domain.model.Movie
 import id.fannan.netflixclonedwithcompose.ui.component.MovieAppBar
 
 @ExperimentalMaterial3Api
 @Composable
-fun MovieDetailScreen(movie: Movie,onBack:() -> Unit) {
+fun MovieDetailScreen(movie: Movie, onBack: () -> Unit) {
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -45,7 +48,12 @@ fun MovieDetailScreen(movie: Movie,onBack:() -> Unit) {
                 .background(Color.Black)
         ) {
             val (backdropRef, topBarRef, ratingRef, buttonRef, overviewRef) = createRefs()
-            Image(
+
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(movie.backdropResourceId)
+                    .crossfade(true)
+                    .build(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .constrainAs(backdropRef) {
@@ -58,7 +66,6 @@ fun MovieDetailScreen(movie: Movie,onBack:() -> Unit) {
                     .drawWithCache {
                         createVerticalGradient(0, 5f)
                     },
-                painter = painterResource(id = movie.backdropResourceId),
                 contentDescription = "",
                 contentScale = ContentScale.Crop
             )
@@ -135,8 +142,7 @@ private fun ContentOverview(modifier: Modifier = Modifier, movie: Movie) {
             },
             text = "Overview", style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold)
         )
-
-        Image(
+        AsyncImage(
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
                 .constrainAs(imageRef) {
@@ -144,9 +150,13 @@ private fun ContentOverview(modifier: Modifier = Modifier, movie: Movie) {
                     start.linkTo(parent.start)
                     width = Dimension.ratio("2:3")
                     height = Dimension.value(150.dp)
-
                 },
-            painter = painterResource(id = movie.posterResourceId), contentDescription = ""
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(movie.backdropResourceId)
+                .crossfade(true)
+                .build(),
+            contentDescription = ""
+
         )
         Text(
             modifier = Modifier
@@ -216,5 +226,5 @@ private fun PreviewContentOverview() {
 @Preview(showBackground = true)
 @Composable
 private fun PreviewMovieDetailScreen() {
-    MovieDetailScreen(MovieDatasource.getNowPlayingMovie()[1]){}
+    MovieDetailScreen(MovieDatasource.getNowPlayingMovie()[1]) {}
 }
