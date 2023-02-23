@@ -3,6 +3,7 @@ package id.fannan.netflixclonedwithcompose.data.remote
 import android.util.Log
 import id.fannan.netflixclonedwithcompose.data.remote.network.MovieService
 import id.fannan.netflixclonedwithcompose.data.remote.response.toListMovie
+import id.fannan.netflixclonedwithcompose.data.remote.response.toMovie
 import id.fannan.netflixclonedwithcompose.domain.model.Movie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -18,5 +19,13 @@ class RemoteDataSource(
         }
     }.catch {
         Log.d("RemoteDataSource", "getNowPlayingMovie:Failed = ${it.message}")
+    }.flowOn(Dispatchers.IO)
+
+    suspend fun getMovieDetail(id: String) = flow {
+        movieService.getMovieDetail(id).toMovie().let {
+            emit(it)
+        }
+    }.catch {
+        Log.d("MovieRepository, ","getMovieDetail : Failed = ${it.message}")
     }.flowOn(Dispatchers.IO)
 }

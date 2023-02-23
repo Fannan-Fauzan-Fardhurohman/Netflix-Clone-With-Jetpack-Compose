@@ -1,6 +1,5 @@
 package id.fannan.netflixclonedwithcompose.ui.component
 
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,7 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import id.fannan.netflixclonedwithcompose.DetailActivity
 import id.fannan.netflixclonedwithcompose.R
 import id.fannan.netflixclonedwithcompose.data.MovieDatasource
 import id.fannan.netflixclonedwithcompose.domain.model.Movie
@@ -30,19 +28,14 @@ fun MovieItem(
     modifier: Modifier = Modifier,
     isGrid: Boolean,
     movie: Movie,
-
+    onItemClick: (Movie) -> Unit
 ) {
-    val context = LocalContext.current
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(4.dp),
         onClick = {
-            context.startActivity(
-                Intent(context, DetailActivity::class.java).apply {
-                    putExtra(DetailActivity.EXTRA_MOVIE, movie)
-                }
-            )
+            onItemClick.invoke(movie)
         }
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
@@ -89,6 +82,6 @@ fun MovieItem(
 @Composable
 fun PreviewMovieItem() {
     NetflixClonedWithComposeTheme {
-        MovieItem(isGrid = false, movie = MovieDatasource.getNowPlayingMovie()[0])
+        MovieItem(isGrid = false, movie = MovieDatasource.getNowPlayingMovie()[0], onItemClick = {})
     }
 }

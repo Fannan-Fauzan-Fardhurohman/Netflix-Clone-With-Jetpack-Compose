@@ -1,4 +1,4 @@
-package id.fannan.netflixclonedwithcompose.ui.screen
+package id.fannan.netflixclonedwithcompose.ui.screen.list
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,15 +15,21 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import id.fannan.netflixclonedwithcompose.data.MovieDatasource
 import id.fannan.netflixclonedwithcompose.domain.model.Movie
+import id.fannan.netflixclonedwithcompose.ui.Routers
 import id.fannan.netflixclonedwithcompose.ui.component.MovieAppBar
 import id.fannan.netflixclonedwithcompose.ui.component.MovieItem
 import id.fannan.netflixclonedwithcompose.ui.theme.NetflixClonedWithComposeTheme
 
 @ExperimentalMaterial3Api
 @Composable
-fun MovieListScreen(paddingValues: PaddingValues, movies: List<Movie>) {
+fun MovieListScreen(
+    paddingValues: PaddingValues,
+    movies: List<Movie>,
+    navHostController: NavHostController
+) {
 
     LazyColumn(
         modifier = Modifier.padding(paddingValues),
@@ -34,7 +40,11 @@ fun MovieListScreen(paddingValues: PaddingValues, movies: List<Movie>) {
             MovieItem(
                 isGrid = false,
                 movie = movie,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp),
+                onItemClick = { movie ->
+                    navHostController.navigate("${Routers.DETAIL}/${movie.id}")
+                }
+
             )
         }
     }

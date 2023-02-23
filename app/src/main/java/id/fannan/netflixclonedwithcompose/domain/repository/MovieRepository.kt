@@ -9,4 +9,8 @@ class MovieRepository(
 ) : IMovieRepository {
     override suspend fun getNowPlayingMovie(): Flow<List<Movie>> =
         remoteDataSource.getNowPlayingMovie()
+
+    override suspend fun getMovieDetail(id: String): Flow<Movie> =
+        remoteDataSource.getMovieDetail(id)
+
 }
