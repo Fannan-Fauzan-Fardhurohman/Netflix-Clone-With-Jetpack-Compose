@@ -9,7 +9,8 @@ import id.fannan.netflixclonedwithcompose.data.local.room.entity.UserEntity
 
 @Database(
     entities = [UserEntity::class],
-    version = 1
+    version = 1,
+    exportSchema = true
 )
 abstract class MovieDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao

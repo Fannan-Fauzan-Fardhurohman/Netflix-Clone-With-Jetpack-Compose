@@ -8,8 +8,10 @@ class MovieApplication : Application() {
     lateinit var appMovieContainer: AppMovieContainer
     override fun onCreate() {
         super.onCreate()
-        appMovieContainer = DefaultAppMovieContainer()
+        appMovieContainer = DefaultAppMovieContainer(context = applicationContext)
     }
+
+
 
 
 }

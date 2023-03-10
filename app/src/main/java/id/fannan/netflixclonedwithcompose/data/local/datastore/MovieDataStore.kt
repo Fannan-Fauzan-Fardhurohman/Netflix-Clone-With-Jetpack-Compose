@@ -14,7 +14,7 @@ class MovieDataStore constructor(
 ) {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "netflix_clone.pb")
 
-    suspend fun <T> storageData(key: Preferences.Key<T>, value: T) {
+    suspend fun <T> storeData(key: Preferences.Key<T>, value: T) {
         context.dataStore.edit { preference ->
             preference[key] = value
         }

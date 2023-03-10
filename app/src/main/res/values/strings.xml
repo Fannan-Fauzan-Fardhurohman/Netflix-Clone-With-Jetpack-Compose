@@ -3,4 +3,11 @@
     <string name="movie_image">Movie Image</string>
     <string name="app_bar_image">App Bar Image</string>
     <string name="title_activity_detail">Detail</string>
+    <string name="email">Email</string>
+    <string name="password">password</string>
+    <string name="login">login</string>
+    <string name="register">Register</string>
+    <string name="not_have_account">\"Belum Punya Akun? \"</string>
+    <string name="have_account">sudah punya akun ?</string>
+    <string name="register_new_account">Register New Account</string>
 </resources>

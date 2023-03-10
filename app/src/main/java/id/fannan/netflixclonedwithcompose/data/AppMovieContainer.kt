@@ -1,5 +1,10 @@
 package id.fannan.netflixclonedwithcompose.data
 
+import android.content.Context
+import id.fannan.netflixclonedwithcompose.data.local.LocalDataSource
+import id.fannan.netflixclonedwithcompose.data.local.datastore.MovieDataStore
+import id.fannan.netflixclonedwithcompose.data.local.room.MovieDatabase
+import id.fannan.netflixclonedwithcompose.data.remote.AuthRepository
 import id.fannan.netflixclonedwithcompose.data.remote.RemoteDataSource
 import id.fannan.netflixclonedwithcompose.data.remote.network.MovieService
 import id.fannan.netflixclonedwithcompose.domain.repository.MovieRepository
@@ -11,9 +16,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 interface AppMovieContainer {
     val remoteDataSource: RemoteDataSource
     val movieRepository: MovieRepository
+    val localDataSource: LocalDataSource
+    val authRepository: AuthRepository
 }
 
-class DefaultAppMovieContainer : AppMovieContainer {
+class DefaultAppMovieContainer(
+    private val context: Context
+) : AppMovieContainer {
     private val BASE_URL = "https://api.themoviedb.org/3/"
 
     //    Print response json
@@ -30,8 +39,17 @@ class DefaultAppMovieContainer : AppMovieContainer {
         .client(interceptor)
         .build()
 
+
     private val movieService: MovieService by lazy {
         retrofit.create(MovieService::class.java)
+    }
+
+    private val movieDatabase: MovieDatabase by lazy {
+        MovieDatabase.getInstance(context)
+    }
+
+    private val dataStore: MovieDataStore by lazy {
+        MovieDataStore(context)
     }
 
     override val remoteDataSource: RemoteDataSource
@@ -42,5 +60,13 @@ class DefaultAppMovieContainer : AppMovieContainer {
             by lazy {
                 MovieRepository(remoteDataSource)
             }
+
+    override val localDataSource: LocalDataSource by lazy {
+        LocalDataSource(movieDatabase.userDao(), dataStore)
+    }
+
+    override val authRepository: AuthRepository by lazy {
+        AuthRepository(localDataSource)
+    }
 
 }
